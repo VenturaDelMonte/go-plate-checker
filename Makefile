@@ -1,6 +1,8 @@
 SRVFOLDER=server
 CLNTFOLDER=client
 GOROOT=$(shell go env GOROOT)
+IMGTAG=$(shell basename `pwd`)
+
 all: deps build run
 
 .PHONY: build
@@ -19,9 +21,7 @@ deps:
 
 .PHONY: docker
 docker:
-	@cd $(SRVFOLDER) && GOROOT=$(GOROOT) rice embed-go
-	@docker build -f ./$(SRVFOLDER)/Dockerfile -t go-react .
-	@cd $(SRVFOLDER) && rm rice-box.go
+	@docker build -f ./$(SRVFOLDER)/Dockerfile -t $(IMGTAG) .
 
 .PHONY: fmt
 fmt:

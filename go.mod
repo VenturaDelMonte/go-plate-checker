@@ -1,4 +1,4 @@
-module github.com/indiependente/go-react-example
+module github.com/VenturaDelMonte/go-plate-checker
 
 go 1.13
 
