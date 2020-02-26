@@ -7,7 +7,7 @@ COPY go.sum .
 RUN go mod download && go get github.com/GeertJohan/go.rice && go get github.com/GeertJohan/go.rice/rice
 ADD ./frontend/dist ./frontend/dist
 ADD ./backend ./backend
-WORKDIR $GOPATH/src/github.com/VenturaDelMonte/go-plate-checker/server/
+WORKDIR $GOPATH/src/github.com/VenturaDelMonte/go-plate-checker/backend/
 RUN rice embed-go
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /svc .
 
