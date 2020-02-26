@@ -4,7 +4,7 @@ GOROOT=$(shell go env GOROOT)
 GOLANGCI_LINT_VERSION=v1.23.6
 IMGTAG=$(shell basename `pwd`)
 
-all: deps build run
+all: deps lint build run
 
 .PHONY: build
 build: clean ui pre-build
