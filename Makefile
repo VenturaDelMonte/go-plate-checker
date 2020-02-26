@@ -2,21 +2,26 @@ SRVFOLDER=server
 CLNTFOLDER=client
 GOROOT=$(shell go env GOROOT)
 GOLANGCI_LINT_VERSION=v1.23.6
+IMGTAG=$(shell basename `pwd`)
 
 all: deps build run
 
 .PHONY: build
 build: clean ui pre-build
-	mkdir -p ./$(SRVFOLDER)/bin && \
-	CGO_ENABLED=0 go build -o ./$(SRVFOLDER)/bin/service ./$(SRVFOLDER)
+	@mkdir -p ./$(SRVFOLDER)/bin && \
+	cd $(SRVFOLDER) && \
+	GOROOT=$(GOROOT) rice embed-go && \
+	CGO_ENABLED=0 go build -o ./bin/service . && \
+	rm rice-box.go
 
 .PHONY: clean
 clean:
 	@rm -rf ./$(SRVFOLDER)/bin
-	@rm -rf ./$(CLNTFOLDER)/build
+	@rm -rf ./$(CLNTFOLDER)/dist
 
 .PHONY: deps
 deps:
+	@npm i
 	@go mod download
 
 .PHONY: deps-init
@@ -27,9 +32,7 @@ deps-init:
 
 .PHONY: docker
 docker:
-	@cd $(SRVFOLDER) && GOROOT=$(GOROOT) rice embed-go
-	@docker build -f ./$(SRVFOLDER)/Dockerfile -t go-react .
-	@cd $(SRVFOLDER) && rm rice-box.go
+	@docker build -f ./$(SRVFOLDER)/Dockerfile -t $(IMGTAG) .
 
 .PHONY: fmt
 fmt:
@@ -47,11 +50,11 @@ pre-build:
 
 .PHONY: run
 run:
-	@cd $(SRVFOLDER) && ENV=dev go run main.go
+	@cd $(SRVFOLDER) && go run main.go
 
 .PHONY: ui
 ui:
-	@cd $(CLNTFOLDER) && npm i && npm run build
+	@cd $(CLNTFOLDER) && npm run build
 
 .PHONY: update_deps
 update_deps:
