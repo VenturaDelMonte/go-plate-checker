@@ -14,7 +14,12 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-const serviceName = `backend`
+type CtxKey int
+
+const (
+	serviceName        = `backend`
+	reqIDCtxKey CtxKey = iota
+)
 
 type Message struct {
 	Text string `json:"text"`
@@ -48,7 +53,7 @@ func run(logger logger.Logger) error {
 
 func sendMessage(logger logger.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		id, _ := r.Context().Value("reqID").(string)
+		id, _ := r.Context().Value(reqIDCtxKey).(string)
 		logger.RequestID(strfmt.UUID(id)).Info("incoming request from " + r.UserAgent())
 
 		message := Message{"John Smith"}
@@ -67,7 +72,7 @@ func sendMessage(logger logger.Logger) http.HandlerFunc {
 func requestIDMiddleware(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		uuid := uuid.New()
-		ctx := context.WithValue(context.Background(), "reqID", uuid.String())
+		ctx := context.WithValue(context.Background(), reqIDCtxKey, uuid.String())
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)
 	}
