@@ -10,7 +10,7 @@ module.exports = {
     ],
     output: {
         filename: 'app.js',
-        path: __dirname + '../../client/dist'
+        path: __dirname + '../../frontend/dist'
     },
     module: {
         rules: [

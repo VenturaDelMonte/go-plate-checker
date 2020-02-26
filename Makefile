@@ -1,5 +1,5 @@
-SRVFOLDER=server
-CLNTFOLDER=client
+SRVFOLDER=backend
+CLNTFOLDER=frontend
 GOROOT=$(shell go env GOROOT)
 GOLANGCI_LINT_VERSION=v1.23.6
 IMGTAG=$(shell basename `pwd`)
