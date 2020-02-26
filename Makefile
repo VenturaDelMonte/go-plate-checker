@@ -1,6 +1,8 @@
 SRVFOLDER=server
 CLNTFOLDER=client
 GOROOT=$(shell go env GOROOT)
+IMGTAG=$(shell basename `pwd`)
+
 all: deps build run
 
 .PHONY: build
@@ -22,8 +24,8 @@ deps:
 	@go mod download
 
 .PHONY: docker
-docker: ui
-	@docker build -f ./$(SRVFOLDER)/Dockerfile -t go-react .
+docker:
+	@docker build -f ./$(SRVFOLDER)/Dockerfile -t $(IMGTAG) .
 
 .PHONY: fmt
 fmt:
