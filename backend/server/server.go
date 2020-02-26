@@ -38,6 +38,7 @@ func NewPlateCheckerServer(pc platechecker.PlateChecker, s store.PlateStore, l l
 	}
 }
 
+// Start starts the server on the hostname and port provided in a separate goroutine, returns an error eventually.
 func (pcs PlateCheckerServer) Start(hostnameport string) error {
 	pcs.l.Info("starting server on " + hostnameport)
 	go func() {
@@ -49,6 +50,9 @@ func (pcs PlateCheckerServer) Start(hostnameport string) error {
 	return nil
 }
 
+// Shutdown stops the server. It can shut the server down thanks to context cancellation, returns an error eventually.
+//
+// Implements the TerminationFn type exposed in https://github.com/indiependente/pkg/blob/master/shutdown/shutdown.go#L15
 func (pcs PlateCheckerServer) Shutdown(ctx context.Context) error {
 	pcs.l.Info("shutting down server")
 	err := pcs.e.Shutdown(ctx)
