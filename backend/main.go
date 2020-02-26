@@ -18,10 +18,6 @@ const (
 	serviceName = `plate-checker`
 )
 
-type Message struct {
-	Text string `json:"text"`
-}
-
 func main() {
 	if err := run(); err != nil {
 		log.Fatalf("Error while running: %s", err)
