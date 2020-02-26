@@ -1,9 +1,10 @@
 SRVFOLDER=server
 CLNTFOLDER=client
 GOROOT=$(shell go env GOROOT)
+GOLANGCI_LINT_VERSION=v1.23.6
 IMGTAG=$(shell basename `pwd`)
 
-all: deps build run
+all: deps lint build run
 
 .PHONY: build
 build: clean ui pre-build
@@ -23,6 +24,12 @@ deps:
 	@npm i
 	@go mod download
 
+.PHONY: deps-init
+deps-init:
+	rm go.mod go.sum
+	go mod init
+	go mod tidy
+
 .PHONY: docker
 docker:
 	@docker build -f ./$(SRVFOLDER)/Dockerfile -t $(IMGTAG) .
@@ -31,6 +38,16 @@ docker:
 fmt:
 	go fmt ./...
 
+.PHONY: lint
+lint:
+	command -v golangci-lint || (cd /usr/local ; wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s $(GOLANGCI_LINT_VERSION))
+	golangci-lint run
+
+.PHONY: pre-build
+pre-build:
+	go get github.com/GeertJohan/go.rice
+	go get github.com/GeertJohan/go.rice/rice
+
 .PHONY: run
 run:
 	@cd $(SRVFOLDER) && go run main.go
@@ -38,12 +55,6 @@ run:
 .PHONY: ui
 ui:
 	@cd $(CLNTFOLDER) && npm run build
-
-.PHONY: pre-build
-pre-build:
-	@command -v rice || \
-	(go get github.com/GeertJohan/go.rice && \
-	go get github.com/GeertJohan/go.rice/rice)
 
 .PHONY: update_deps
 update_deps:
