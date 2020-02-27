@@ -4,7 +4,7 @@ GOROOT=$(shell go env GOROOT)
 GOLANGCI_LINT_VERSION=v1.23.6
 IMGTAG=$(shell basename `pwd`)
 
-all: deps lint build run
+all: deps lint test build run
 
 .PHONY: build
 build: clean ui pre-build
@@ -51,6 +51,10 @@ pre-build:
 .PHONY: run
 run:
 	@cd $(SRVFOLDER) && go run main.go
+
+.PHONY: test
+test:
+	go test ./...
 
 .PHONY: ui
 ui:

@@ -14,6 +14,7 @@ import (
 )
 
 func TestPlateCheckerServer_PlateCheckEndpoint(t *testing.T) {
+	t.Parallel()
 	expectedJSON := "{\"message\":\"could not get image part\",\"success\":false}\n"
 
 	ctrl := gomock.NewController(t)
