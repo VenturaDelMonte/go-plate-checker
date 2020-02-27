@@ -1,3 +1,5 @@
+//go:generate mockgen -package store -source=interface.go -destination interface_mock.go
+
 package store
 
 import "github.com/VenturaDelMonte/go-plate-checker/backend/models"

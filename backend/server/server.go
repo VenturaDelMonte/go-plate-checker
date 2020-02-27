@@ -30,6 +30,8 @@ func NewPlateCheckerServer(pc platechecker.PlateChecker, s store.PlateStore, l l
 			return uuid.New().String()
 		},
 	}))
+	e.HTTPErrorHandler = customErrorHandler
+
 	return PlateCheckerServer{
 		e:  e,
 		pc: pc,
@@ -60,4 +62,17 @@ func (pcs PlateCheckerServer) Shutdown(ctx context.Context) error {
 		return fmt.Errorf("could not shutdown server: %w", err)
 	}
 	return nil
+}
+
+func (pcs PlateCheckerServer) logWriteReturn(c echo.Context, code int, msg string, success bool, err error) *echo.HTTPError {
+	pcs.l.Error(msg, err)
+	_ = c.JSON(code, Response{
+		Message: msg,
+		Success: success,
+	})
+	return &echo.HTTPError{
+		Code:     code,
+		Message:  msg,
+		Internal: err,
+	}
 }
