@@ -14,10 +14,10 @@ import (
 
 // PlateCheckerServer exposes endpoints to serve plate checking capabilities.
 type PlateCheckerServer struct {
-	e  *echo.Echo
-	pc platechecker.PlateChecker
-	s  store.PlateStore
-	l  logger.Logger
+	e     *echo.Echo
+	pc    platechecker.PlateChecker
+	store store.PlateStore
+	log   logger.Logger
 }
 
 // NewPlateCheckerServer returns a new instance of a PlateCheckerServer.
@@ -33,20 +33,20 @@ func NewPlateCheckerServer(pc platechecker.PlateChecker, s store.PlateStore, l l
 	e.HTTPErrorHandler = customErrorHandler
 
 	return PlateCheckerServer{
-		e:  e,
-		pc: pc,
-		s:  s,
-		l:  l,
+		e:     e,
+		pc:    pc,
+		store: s,
+		log:   l,
 	}
 }
 
 // Start starts the server on the hostname and port provided in a separate goroutine, returns an error eventually.
 func (pcs PlateCheckerServer) Start(hostnameport string) error {
-	pcs.l.Info("starting server on " + hostnameport)
+	pcs.log.Info("starting server on " + hostnameport)
 	go func() {
 		err := pcs.e.Start(hostnameport)
 		if err != nil {
-			pcs.l.Fatal("could not start server: ", err)
+			pcs.log.Fatal("could not start server: ", err)
 		}
 	}()
 	return nil
@@ -56,7 +56,7 @@ func (pcs PlateCheckerServer) Start(hostnameport string) error {
 //
 // Implements the TerminationFn type exposed in https://github.com/indiependente/pkg/blob/master/shutdown/shutdown.go#L15
 func (pcs PlateCheckerServer) Shutdown(ctx context.Context) error {
-	pcs.l.Info("shutting down server")
+	pcs.log.Info("shutting down server")
 	err := pcs.e.Shutdown(ctx)
 	if err != nil {
 		return fmt.Errorf("could not shutdown server: %w", err)
@@ -65,7 +65,7 @@ func (pcs PlateCheckerServer) Shutdown(ctx context.Context) error {
 }
 
 func (pcs PlateCheckerServer) logWriteReturn(c echo.Context, code int, msg string, success bool, err error) *echo.HTTPError {
-	pcs.l.Error(msg, err)
+	pcs.log.Error(msg, err)
 	_ = c.JSON(code, Response{
 		Message: msg,
 		Success: success,
