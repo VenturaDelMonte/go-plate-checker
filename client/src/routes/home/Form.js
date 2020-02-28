@@ -8,14 +8,14 @@ export default class Form extends React.Component {
     username: "",
     email: "",
     password: ""
-  };
+  }
 
   change = e => {
     this.props.onChange({ [e.target.name]: e.target.value });
     this.setState({
       [e.target.name]: e.target.value
     });
-  };
+  }
 
   onSubmit = e => {
     e.preventDefault();
@@ -34,7 +34,7 @@ export default class Form extends React.Component {
       email: "",
       password: ""
     });
-  };
+  }
 
   render() {
     return (
@@ -45,28 +45,28 @@ export default class Form extends React.Component {
           value={this.state.firstName}
           onChange={e => this.change(e)}
         />
-        <br />
+        <br/>
         <Input
           name="lastName"
           placeholder="Last name"
           value={this.state.lastName}
           onChange={e => this.change(e)}
         />
-        <br />
+        <br/>
         <Input
           name="username"
           placeholder="Username"
           value={this.state.username}
           onChange={e => this.change(e)}
         />
-        <br />
+        <br/>
         <Input
           name="email"
           placeholder="Email"
           value={this.state.email}
           onChange={e => this.change(e)}
         />
-        <br />
+        <br/>
         <Input
           name="password"
           type="password"
@@ -74,7 +74,7 @@ export default class Form extends React.Component {
           value={this.state.password}
           onChange={e => this.change(e)}
         />
-        <br />
+        <br/>
         <Button onClick={e => this.onSubmit(e)}>Submit</Button>
       </form>
     );

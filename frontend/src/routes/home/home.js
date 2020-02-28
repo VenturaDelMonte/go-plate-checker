@@ -43,9 +43,6 @@ class Home extends React.Component {
         return (
           <div>
             <Form onChange={fields => this.onChange(fields)} />
-            <p>
-              {JSON.stringify(this.state.fields, null, 2)}
-            </p>
           </div>
         )
     }
