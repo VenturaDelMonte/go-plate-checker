@@ -24,6 +24,7 @@ func main() {
 	}
 }
 
+//nolint
 func run() error {
 	log := logger.GetLogger(serviceName, logger.INFO)
 	ctx, cancel := context.WithCancel(context.Background())

@@ -1,5 +1,7 @@
 import React from 'react'
-import Form from "./Form";
+import PlateForm from "./Form";
+import { Badge } from 'reactstrap';
+
 class Home extends React.Component {
     constructor(props) {
         super(props)
@@ -42,7 +44,8 @@ class Home extends React.Component {
     render() {
         return (
           <div>
-            <Form onChange={fields => this.onChange(fields)} />
+            <h1>Compila il modulo! <Badge color="secondary">New</Badge></h1>
+            <PlateForm onChange={fields => this.onChange(fields)} />
           </div>
         )
     }
