@@ -1,6 +1,7 @@
 import React from 'react'
 import PlateForm from "./Form";
 import { Badge } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 
 class Home extends React.Component {
     constructor(props) {
@@ -43,10 +44,14 @@ class Home extends React.Component {
 
     render() {
         return (
-          <div>
-            <h1>Compila il modulo! <Badge color="secondary">New</Badge></h1>
-            <PlateForm onChange={fields => this.onChange(fields)} />
-          </div>
+            <Container className="themed-container" fluid="xl">
+              <Row>
+                <Col xs="auto"><h1>Compila il modulo! <Badge color="secondary">New</Badge></h1></Col>
+              </Row>
+            <Row>
+              <Col sm="12" md={{ size: 12, offset: 0 }}><PlateForm onChange={fields => this.onChange(fields)} /></Col>
+            </Row>
+          </Container>
         )
     }
 }

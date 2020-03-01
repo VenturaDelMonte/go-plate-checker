@@ -6,7 +6,8 @@ export default class PlateForm extends React.Component {
     firstName: "",
     lastName: "",
     email: "",
-    plate: ""
+    plate: "",
+    position: ""
   }
 
   change = e => {
@@ -18,6 +19,29 @@ export default class PlateForm extends React.Component {
 
   handlePictureUpload = (e, n) => {
     console.log("Load" + n);
+  }
+
+  componentDidMount() {
+    var self = this;
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+    navigator.geolocation.getCurrentPosition(function(location) {
+      console.log(location.coords.latitude);
+      console.log(location.coords.longitude);
+      console.log(location.coords.accuracy);
+      self.setState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        plate: "",
+        position: "" + location.coords.latitude + " " + location.coords.longitude
+      });
+    }, function(error) {
+      console.log(error);
+    }, options);
   }
 
   onSubmit = e => {
@@ -36,13 +60,15 @@ export default class PlateForm extends React.Component {
       firstName: "",
       lastName: "",
       email: "",
-      plate: ""
+      plate: "",
+      position: ""
     });
     this.props.onChange({
       firstName: "",
       lastName: "",
       email: "",
-      plate: ""
+      plate: "",
+      position: ""
     });
   }
 
@@ -79,6 +105,16 @@ export default class PlateForm extends React.Component {
             type="plate"
             placeholder="Targa Auto"
             value={this.state.plate}
+            onChange={e => this.change(e)}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Input
+            name="position"
+            type="position"
+            placeholder=""
+            disabled
+            value={this.state.position}
             onChange={e => this.change(e)}
           />
         </FormGroup>
