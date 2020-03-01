@@ -1,13 +1,44 @@
 import React from "react";
 import {Button, Input, Form, FormGroup} from "reactstrap";
+import CameraPhoto, { FACING_MODES, IMAGE_TYPES } from 'jslib-html5-camera-photo';
+
 
 export default class PlateForm extends React.Component {
-  state = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    plate: "",
-    position: ""
+
+  constructor (props, context) {
+    super(props, context);
+    this.cameraPhoto = null;
+    this.state = {
+      firstName: "",
+      lastName: "",
+      email: "",
+      plate: "",
+      position: ""
+    }
+  }
+
+  startCamera (idealFacingMode, idealResolution) {
+    this.cameraPhoto.startCamera(idealFacingMode, idealResolution)
+      .then(() => {
+        console.log('camera is started !');
+      })
+      .catch((error) => {
+        console.error('Camera not started!', error);
+      });
+  }
+
+  getDataUri (sizeFactor) {
+    return this.cameraPhoto.getDataUri(sizeFactor);
+  }
+
+  stopCamera () {
+    this.cameraPhoto.stopCamera()
+      .then(() => {
+        console.log('Camera stoped!');
+      })
+      .catch((error) => {
+        console.log('No camera to stop!:', error);
+      });
   }
 
   change = e => {
@@ -19,10 +50,12 @@ export default class PlateForm extends React.Component {
 
   handlePictureUpload = (e, n) => {
     console.log("Load" + n);
+    this.startCamera(FACING_MODES.ENVIRONMENT, {});
   }
 
   componentDidMount() {
     var self = this;
+    this.cameraPhoto = new CameraPhoto(this.refs.video);
     var options = {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -139,6 +172,10 @@ export default class PlateForm extends React.Component {
         <FormGroup>
           <Button onClick={e => this.onSubmit(e)}>Invia</Button>
         </FormGroup>
+        <video
+          ref="video"
+          autoPlay="true"
+        />
       </Form>
     );
   }
