@@ -9,7 +9,7 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/indiependente/pkg v0.1.0
 	github.com/labstack/echo v3.3.10+incompatible
-	github.com/labstack/gommon v0.3.0 // indirect
+	github.com/labstack/gommon v0.3.0
 	github.com/mattn/go-colorable v0.1.4 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/stretchr/testify v1.4.0

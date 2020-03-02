@@ -18,6 +18,7 @@ type Response struct {
 // PlateCheckEndpoint returns the platecheck handler.
 func (pcs PlateCheckerServer) PlateCheckEndpoint() echo.HandlerFunc {
 	return func(c echo.Context) error {
+
 		file, err := c.FormFile("image")
 		if err != nil {
 			return pcs.logWriteReturn(c, http.StatusBadRequest, "could not get image part", false, err)
