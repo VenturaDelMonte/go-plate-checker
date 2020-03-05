@@ -4,9 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net/http"
 
-	rice "github.com/GeertJohan/go.rice"
 	dummychecker "github.com/VenturaDelMonte/go-plate-checker/backend/platechecker/dummy"
 	"github.com/VenturaDelMonte/go-plate-checker/backend/server"
 	dummystore "github.com/VenturaDelMonte/go-plate-checker/backend/store/dummy"
@@ -30,8 +28,7 @@ func run() error {
 	pc := dummychecker.PlateChecker{}
 	store := dummystore.Store{}
 	srv := server.NewPlateCheckerServer(pc, store, log)
-	assetHandler := http.FileServer(rice.MustFindBox("../frontend/dist").HTTPBox())
-	srv.Routes(assetHandler)
+	srv.Routes()
 	err := srv.Start(":8000")
 	if err != nil {
 		return fmt.Errorf("server startup failed: %w", err)

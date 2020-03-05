@@ -7,12 +7,10 @@ IMGTAG=$(shell basename `pwd`)
 all: deps lint test build run
 
 .PHONY: build
-build: clean ui pre-build
+build: clean
 	@mkdir -p ./$(SRVFOLDER)/bin && \
 	cd $(SRVFOLDER) && \
-	GOROOT=$(GOROOT) rice embed-go && \
-	CGO_ENABLED=0 go build -o ./bin/service . && \
-	rm rice-box.go
+	CGO_ENABLED=0 go build -o ./bin/service .
 
 .PHONY: clean
 clean:
@@ -42,11 +40,6 @@ fmt:
 lint:
 	command -v golangci-lint || (cd /usr/local ; wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s $(GOLANGCI_LINT_VERSION))
 	golangci-lint run
-
-.PHONY: pre-build
-pre-build:
-	go get github.com/GeertJohan/go.rice
-	go get github.com/GeertJohan/go.rice/rice
 
 .PHONY: run
 run:
