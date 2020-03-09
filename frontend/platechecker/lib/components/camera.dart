@@ -32,7 +32,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       // Get a specific camera from the list of available cameras.
       widget.camera,
       // Define the resolution to use.
-      ResolutionPreset.medium,
+      ResolutionPreset.ultraHigh,
     );
 
     // Next, initialize the controller. This returns a Future.
@@ -116,8 +116,15 @@ class DisplayPictureScreen extends StatelessWidget {
       appBar: AppBar(title: Text('Foto scattata')),
       // The image is stored as a file on the device. Use the `Image.file`
       // constructor with the given path to display the image.
-      body: Image.file(File(imagePath)),
-       floatingActionButton: FloatingActionButton(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: new FileImage(File(imagePath)),
+            fit: BoxFit.cover
+          ) ,
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
         child: Icon(Icons.check),
         // Provide an onPressed callback.
         onPressed: () async {
