@@ -3,7 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:platechecker/bloc_delegate.dart';
-import 'package:platechecker/components/form.dart';
+import 'package:platechecker/components/main_form.dart';
 import 'package:platechecker/styles/themes.dart';
 
 Future<void> main() async {
@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
         title: Text('Registra il veicolo!'),
         elevation: 2,
       ),
-      body: new FormFieldsExampleForm(camera: camera)
+      body: new MainForm(camera: camera)
     );
   }
 }
