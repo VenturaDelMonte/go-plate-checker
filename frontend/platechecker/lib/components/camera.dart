@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +10,11 @@ import 'package:path_provider/path_provider.dart';
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
   final CameraDescription camera;
-
+  final Completer<Uint8List> completer;
   const TakePictureScreen({
     Key key,
     @required this.camera,
+    @required this.completer,
   }) : super(key: key);
 
   @override
@@ -91,7 +93,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(imagePath: path),
+                builder: (context) => DisplayPictureScreen(
+                    imagePath: path, completer: widget.completer),
               ),
             );
           } catch (e) {
@@ -107,29 +110,30 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
+  final Completer<Uint8List> completer;
 
-  const DisplayPictureScreen({Key key, this.imagePath}) : super(key: key);
+  const DisplayPictureScreen({Key key, this.imagePath, this.completer})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Foto scattata')),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: new FileImage(File(imagePath)),
-            fit: BoxFit.cover
-          ) ,
+        appBar: AppBar(title: Text('Foto scattata')),
+        // The image is stored as a file on the device. Use the `Image.file`
+        // constructor with the given path to display the image.
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: new FileImage(File(imagePath)), fit: BoxFit.cover),
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.check),
-        // Provide an onPressed callback.
-        onPressed: () async {
-        }
-       )
-    );
+        floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.check),
+            // Provide an onPressed callback.
+            onPressed: () async {
+              Uint8List bytes = File(imagePath).readAsBytesSync();
+              completer.complete(bytes);
+              Navigator.pop(context);
+            }));
   }
 }
