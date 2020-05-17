@@ -70,7 +70,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.camera_alt),
         // Provide an onPressed callback.
-        onPressed: () async {
+        onPressed: () async { 
           // Take the Picture in a try / catch block. If anything goes wrong,
           // catch the error.
           try {
